@@ -1,14 +1,12 @@
-import './App.css'
-import { Provider } from 'react-redux'
-import CakeContainer from './components/CakeContainer'
-import store from './redux/store'
+import { useState } from 'react'
+import ToDo from './components/ToDo'
 
 function App() {
 
   return (
-    <Provider store={store}>
-      <CakeContainer />
-    </Provider>
+    <>
+      <ToDo />
+    </>
   )
 }
 
