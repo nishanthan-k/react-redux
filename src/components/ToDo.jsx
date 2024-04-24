@@ -1,16 +1,26 @@
-import React, { useState } from "react";
-import { useDispatch } from "react-redux";
+import React from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { addToDo, editToDo, updateToDoInput, updateEditToDoID } from "../features/todo/todoSlice";
 import TodoState from "./ToDoState";
-import { addToDo } from "../features/todo/todoSlice";
 
 function ToDo() {
-  const [input, setInput] = useState("");
+  const input = useSelector((state) => state.inputToDo);
+  const editToDoID = useSelector((state) => state.editToDoID);
+  const buttonContext = editToDoID ? "Update" : "Create";
   const dispatch = useDispatch();
 
   const addToDoHandler = (e) => {
     e.preventDefault();
-    input &&dispatch(addToDo({task: input}));
-    // setInput("");
+
+    if (input) {
+      if (editToDoID) {
+        dispatch(editToDo({ id: editToDoID, task: input }));
+      } else {
+        dispatch(addToDo({ task: input }));
+      }
+      // Reset editToDoID after adding or updating todo
+      dispatch(updateEditToDoID({ id: null }));
+    }
   };
 
   return (
@@ -20,12 +30,12 @@ function ToDo() {
           type="text"
           name="input"
           id="input"
-          value={input}
+          value={input || ""}
           className="outline-none px-2 w-5/6 "
-          onChange={(e) => setInput(e.target.value)}
+          onChange={(e) => dispatch(updateToDoInput({ task: e.target.value }))}
         />
         <button onClick={addToDoHandler} className="bg-purple-600 py-2 px-4">
-          Create
+          {buttonContext}
         </button>
       </div>
 

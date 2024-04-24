@@ -3,11 +3,16 @@ import { useDispatch, useSelector } from "react-redux";
 import { MdDelete } from "react-icons/md";
 import { FaEdit } from "react-icons/fa";
 import { FaRegCircle } from "react-icons/fa";
-import { removeToDo } from "../features/todo/todoSlice";
+import {
+  editToDo,
+  removeToDo,
+  updateEditToDoID,
+  updateToDoInput,
+} from "../features/todo/todoSlice";
 
 function TodoState() {
   const todos = useSelector((state) => state.todos);
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
   return (
     <div className="bg-slate-200 max-w-xl w-3/4 h-max">
@@ -19,10 +24,18 @@ function TodoState() {
           <div className="flex w-5/6 justify-between">
             <p className="w-3/4 overflow-scroll mr-1">{todo.task}</p>
             <div className="flex w-1/4 gap-5 mr-1">
-              <FaEdit size="20" />
-              <MdDelete size="20" onClick={() => (
-                dispatch(removeToDo({id: todo.id}))
-              )} />
+              <FaEdit
+                size="20"
+                // onClick={() => dispatch(editToDo({ id: todo.id , task: "Updated Redux" }))}
+                onClick={() => {
+                  dispatch(updateToDoInput({ task: todo.task }))
+                  dispatch(updateEditToDoID({ id: todo.id }))
+                }}
+              />
+              <MdDelete
+                size="20"
+                onClick={() => dispatch(removeToDo({ id: todo.id }))}
+              />
             </div>
           </div>
         </div>
